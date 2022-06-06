@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pop_up_nav/next_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -50,10 +51,21 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             ElevatedButton(onPressed: (){
-                showMyDialog(alert: createAlert());
+                showMyDialog(dialog: createAlert());
              
             }, child: Text("Montrer une alerte")),
-            ElevatedButton(onPressed: (){}, child: Text("Pardi"))
+            ElevatedButton(onPressed: (){
+              showMyDialog(dialog: createSimple());
+
+            }, child: Text("Montrer simple")),
+            ElevatedButton(onPressed: (){
+              final nextPage=Next(color: appBarColor);
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (BuildContext ctx){
+                  return nextPage;
+                })
+              );
+            }, child: Text("Passer a la page suivante"))
 
           ],
         ),
@@ -110,9 +122,22 @@ class _MyHomePageState extends State<MyHomePage> {
       ],);
   }
   
-  Future<void> showMyDialog({required AlertDialog alert}) async{
+  Future<void> showMyDialog({required Widget dialog}) async{
     await showDialog(context: context, builder: (BuildContext ctx){
-      return alert;
+      return dialog;
     },barrierDismissible:false);
+  }
+  
+  SimpleDialog createSimple(){
+    final simple=SimpleDialog(
+      title: Text("Je suis un simple dialogue"),
+      children: [
+        Text("Je suis comme une colonne"),
+        Divider(),
+        Text("Bof Bof Bof je suis dans un pop up")
+      ],
+      elevation: 15,
+    );
+    return simple;
   }
 }
